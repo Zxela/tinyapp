@@ -4,8 +4,14 @@
   <title>TinyApp</title>
 </head>
 <body>
+    <header>
+        <% include partials/_header %>
+    </header>
     <h1>Shorten URL's</h1>
-    <div><li>IP</li></div>
-    <h2>Shrink your URL</h2>
+    <% for(let key in urls) { %>
+       <li> <%= key %> = <%= urls[key] %></li>
+    <% } %>
+    <div></div>
+    <h2><a href="localhost:8080/urls"> Shrink your URL here</a></h2>
 </body>
 </html>
