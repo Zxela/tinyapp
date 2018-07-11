@@ -57,13 +57,13 @@ app.get("/u/:shortURL", (req, res) => {
 //recieve username POST from _header.ejs || Login
 app.post("/login", (req, res) => {
     res.cookie("username", req.body.username);
-    console.log(req.body.username, "has logged in")
+    console.log(req.body.username, "has logged in.")
     res.redirect(`http://localhost:${PORT}/urls`);
 });
 
 //Logout 
 app.post("/logout", (req, res) => {
-    console.log(`logging out ${req.cookies['username']} \n See you again soon.`);
+    console.log(`Logging out ${req.cookies['username']}.\nSee you again soon.`);
     res.clearCookie("username");
     res.redirect(`http://localhost:${PORT}/urls`);
 });
