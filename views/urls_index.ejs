@@ -9,7 +9,7 @@
     </header>
     <h1>Shorten URL's</h1>
     <% for(let key in urls) { %>
-       <li> <%= key %> = <%= urls[key] %></li>
+       <li><a href="localhost:8080/u/<%= key %>"><%= key %></a>  = <%= urls[key] %></li>
     <% } %>
     <div></div>
     <h2><a href="localhost:8080"> Shrink your URL here</a></h2>
