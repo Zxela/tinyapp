@@ -50,6 +50,12 @@ app.post("/urls/new", (req, res) => {
     res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 });
 
+app.post("/urls/:id/edit", (req, res) => {
+    delete urlDatabase[req.params.id];
+    urlDatabase[req.params.id] = req.body.longURL;
+    res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`); 
+})
+
 app.post("/urls/:id/delete", (req, res) => {
     console.log(req.body);  // debug statement to see POST parameters
     console.log("pressed delete");

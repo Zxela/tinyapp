@@ -10,7 +10,11 @@
 </head>
 <body>
     <header><% include partials/_header %></header>
-    "<%= urls[shortURL] %>" shortened is <a href=http://localhost:8080/u/<%= shortURL %>><%= shortURL %></a>
+    <h3>"<%= urls[shortURL] %>" has been shortened to <a href=http://localhost:8080/u/<%= shortURL %>><%= shortURL %></a></h3>
+    <form action="/urls/<%= shortURL %>/edit" method="POST">
+        <input id="longURL" type="text" name="longURL" placeholder="<%= urls[shortURL] %>" style="width: 300px">
+        <input type="submit" value="Update">
+      </form>
     <hr />
     <a href="http://localhost:8080/urls/">List of all shortened URL's</a>  
 </body>

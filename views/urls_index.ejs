@@ -8,9 +8,11 @@
         <% include partials/_header %>
     </header>
         <% for(let key in urls) { %>
-       <li><a href="localhost:8080/u/<%= key %>"><%= key %></a>  = <%= urls[key] %><form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form></li>
+       <li><a href="http://localhost:8080/u/<%= key %>"><%= key %></a>  = <%= urls[key] %><form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form></li>
     <% } %>
     <div></div>
-    <h2><a target="_self" href="http://localhost:8080"> Shrink your URL here</a></h2>
+    <hr />
+    <h4><a target="_self" href="http://localhost:8080">Shrink your URL here</a></h4>
+    <h4><a target="_self" href="http://localhost:8080/urls/">List of shrunken URL's</a></h4>
 </body>
 </html>
