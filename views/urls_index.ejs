@@ -8,7 +8,7 @@
         <% include partials/_header %>
     </header>
         <% for(let key in urls) { %>
-       <li><a href="http://localhost:8080/u/<%= key %>"><%= key %></a>  = <%= urls[key] %><form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form></li>
+       <li><a href="http://localhost:8080/u/<%= key %>"><%= key %></a>  --> <%= urls[key] %> <a href="http://localhost:8080/urls/<%= key %>">Edit</a> <form method="POST" action="/urls/<%= key %>/delete"><br><input type="submit" class="btn" value="Delete Me" /></form><br></li>
     <% } %>
     <div></div>
     <hr />

@@ -51,9 +51,10 @@ app.post("/urls/new", (req, res) => {
 });
 
 app.post("/urls/:id/edit", (req, res) => {
+    console.log(req.body);
     delete urlDatabase[req.params.id];
     urlDatabase[req.params.id] = req.body.longURL;
-    res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`); 
+    res.redirect(`http://localhost:${PORT}/urls/${req.params.id}`); 
 })
 
 app.post("/urls/:id/delete", (req, res) => {
