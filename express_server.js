@@ -19,15 +19,15 @@ app.set("view engine", "ejs");
 app.get("/", (req, res) => {
     res.redirect("/urls/new");
 });
-
+//page with index of urls
 app.get("/urls", (req, res) => {
     let templateVars = {
         urls: urlDatabase,
-        cookies: req.cookies['username']
+        cookies: req.cookies['username'] 
     };
     res.render("urls_index", templateVars);
 });
-
+//page to make new tinyURL
 app.get("/urls/new", (req, res) => {
     let templateVars = {
         cookies: req.cookies['username'],
@@ -69,22 +69,19 @@ app.post("/logout", (req, res) => {
 });
 
 app.post("/urls/new", (req, res) => {
-    console.log(req.body);  // debug statement to see POST parameters
     let shortenedURL = generateRandomString();
     urlDatabase[shortenedURL] = req.body.longURL;
     res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 });
 
 app.post("/urls/:id/edit", (req, res) => {
-    console.log(req.body);
     delete urlDatabase[req.params.id];
     urlDatabase[req.params.id] = req.body.longURL;
     res.redirect(`http://localhost:${PORT}/urls/${req.params.id}`); 
 })
 
 app.post("/urls/:id/delete", (req, res) => {
-    console.log(req.body);  // debug statement to see POST parameters
-    console.log("pressed delete");
+    console.log(urlDatabase[req.params.id], "has been deleted");
     delete urlDatabase[req.params.id];
     res.redirect(`http://localhost:${PORT}/urls`); //redirect to updated list
 });
