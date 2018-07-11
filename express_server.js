@@ -36,7 +36,7 @@ app.get("/u/:shortURL", (req, res) => {
     let longURL = urlDatabase[req.params.shortURL];
     if (longURL == undefined) {
         res.status(404)
-            .send("Not found!")// redirect short URL to Long URL
+        .send("Not found!")// redirect short URL to Long URL
     }
     else {
         res.redirect(longURL);
@@ -45,15 +45,13 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.post("/urls", (req, res) => {
     console.log(req.body);  // debug statement to see POST parameters
-    let shortenedURL = generateRandomString()
-    urlDatabase[shortenedURL] = req.body.longURL
-
-
-    res.redirect(`http://localhost${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
+    let shortenedURL = generateRandomString();
+    urlDatabase[shortenedURL] = req.body.longURL;
+    res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 
 });
 app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`)
+    console.log(`App listening on port ${PORT}`);
 });
 // generate string function
 function generateRandomString() {
