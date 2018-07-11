@@ -5,8 +5,10 @@
       <input id="username" type="text" name="username" placeholder="username" style="width: 259px">
       <input type="submit" value="Submit">
     </form>
+    <br>
+    <br>
   <% } else {%>
-      Current User is: <%= cookies %>
+      Current User is: <%= cookies %><form action="/logout" method="POST"><input type="submit" value="Logout" id="Logout"></form>
       <br>
       <br>
   <% } %>

@@ -25,7 +25,6 @@ app.get("/urls", (req, res) => {
         urls: urlDatabase,
         cookies: req.cookies['username']
     };
-    console.log(templateVars.cookies)
     res.render("urls_index", templateVars);
 });
 
@@ -57,16 +56,15 @@ app.get("/u/:shortURL", (req, res) => {
 });
 //recieve username POST from _header.ejs || Login
 app.post("/login", (req, res) => {
-    console.log(req.body);
     res.cookie("username", req.body.username);
-    console.log(req.cookies['username'])
+    console.log(req.body.username, "has logged in")
     res.redirect(`http://localhost:${PORT}/urls`);
 });
 
 //Logout 
 app.post("/logout", (req, res) => {
-    console.log(req.body);
-    res.cookie("username", req.body.username);
+    console.log(`logging out ${req.cookies['username']} \n See you again soon.`);
+    res.clearCookie("username");
     res.redirect(`http://localhost:${PORT}/urls`);
 });
 
