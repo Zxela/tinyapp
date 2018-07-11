@@ -43,13 +43,20 @@ app.get("/u/:shortURL", (req, res) => {
     }
 });
 
-app.post("/urls", (req, res) => {
+app.post("/urls/new", (req, res) => {
     console.log(req.body);  // debug statement to see POST parameters
     let shortenedURL = generateRandomString();
     urlDatabase[shortenedURL] = req.body.longURL;
     res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
-
 });
+
+app.post("/urls/:id/delete", (req, res) => {
+    console.log(req.body);  // debug statement to see POST parameters
+    console.log("pressed delete");
+    delete urlDatabase[req.params.id];
+    res.redirect(`http://localhost:${PORT}/urls`); //redirect to updated list
+});
+
 app.listen(PORT, () => {
     console.log(`App listening on port ${PORT}`);
 });

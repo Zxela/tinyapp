@@ -7,11 +7,10 @@
     <header>
         <% include partials/_header %>
     </header>
-    <h1>Shorten URL's</h1>
-    <% for(let key in urls) { %>
-       <li><a href="localhost:8080/u/<%= key %>"><%= key %></a>  = <%= urls[key] %></li>
+        <% for(let key in urls) { %>
+       <li><a href="localhost:8080/u/<%= key %>"><%= key %></a>  = <%= urls[key] %><form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form></li>
     <% } %>
     <div></div>
-    <h2><a href="localhost:8080"> Shrink your URL here</a></h2>
+    <h2><a target="_self" href="http://localhost:8080"> Shrink your URL here</a></h2>
 </body>
 </html>
