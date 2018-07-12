@@ -34,16 +34,24 @@ app.get("/", (req, res) => { //redirect to mainpage
     res.redirect("/urls/new");
 });
 app.get("/register", (req, res) => { //Registration Page
-    userID = req.cookies['user_id']
-    user = users[userID]
+    let userID = req.cookies['user_id']
+    let user = users[userID]
     let templateVars = {
         user: user
     };
     res.render("register", templateVars);
 });
+app.get("/login", (req, res) => { //Login
+    let userID = req.cookies['user_id']
+    let user = users[userID]
+    let templateVars = {
+        user: user
+    };
+    res.render("login", templateVars);
+});
 app.get("/urls", (req, res) => { //page with index of urls
-    userID = req.cookies['user_id']
-    user = users[userID]
+    let userID = req.cookies['user_id']
+    let user = users[userID]
     let templateVars = {
         user: user,
         urls: urlDatabase,
@@ -51,16 +59,16 @@ app.get("/urls", (req, res) => { //page with index of urls
     res.render("urls_index", templateVars);
 });
 app.get("/urls/new", (req, res) => { //page to make new tinyURL
-    userID = req.cookies['user_id']
-    user = users[userID]
+    let userID = req.cookies['user_id']
+    let user = users[userID]
     let templateVars = {
         user: user
     };
     res.render("urls_new", templateVars);
 });
 app.get("/urls/:id", (req, res) => { //render page showing shrunk url
-    userID = req.cookies['user_id']
-    user = users[userID]
+    let userID = req.cookies['user_id']
+    let user = users[userID]
     let templateVars = {
         shortURL: req.params.id,
         urls: urlDatabase,
@@ -81,12 +89,22 @@ app.get("/u/:shortURL", (req, res) => { // redirect short URL to Long URL
 
 /* Post End-Points */
 app.post("/login", (req, res) => { //recieve username POST from _header.ejs || Login
-    // res.cookie("username", req.body.username);
-    console.log(req.body.username, "has logged in.")
-    res.redirect(`http://localhost:${PORT}/urls`);
+    for (var ids in users) {
+        if (req.body.username === users[ids]['email']) { //if username matches db
+            if (req.body.password === users[ids]['password']) {
+                res.cookie("user_id", ids)
+                res.redirect("http://localhost:8080/")
+            } else {
+                res.status(400).send("Username and Password do not match. Please go-back and try again.")
+            }
+        } else {
+            res.status(400).send("Username does not exist. If you haven't already, please register an account at http://localhost:8080/register")
+        }
+    }
+    res.redirect("http://localhost:8080/register")
 });
 app.post("/logout", (req, res) => { //Logout
-    console.log(`Logging out ${req.cookies['username']}.\nSee you again soon.`); //log the logout
+    console.log(`Logging out ${users[req.cookies['user_id']]['email']}.\nSee you again soon.`); //log the logout
     res.clearCookie("user_id");
     res.redirect(`http://localhost:${PORT}/urls`);
 });
