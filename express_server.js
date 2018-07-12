@@ -26,9 +26,7 @@ const users = { //stores users
 app.use(bodyParser.urlencoded({ extended: true })); //use body parser
 app.use(cookieParser()); //use cookie parser
 
-
 app.set("view engine", "ejs"); //set view engine
-
 
 app.get("/", (req, res) => { //redirect to mainpage
     res.redirect("/urls/new");
@@ -74,7 +72,7 @@ app.get("/urls/:id", (req, res) => { //render page showing shrunk url
         urls: urlDatabase,
         user: user
     };
-    res.render("urls_show", templateVars.cookiesy);
+    res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => { // redirect short URL to Long URL
     let longURL = urlDatabase[req.params.shortURL];
@@ -89,24 +87,27 @@ app.get("/u/:shortURL", (req, res) => { // redirect short URL to Long URL
 
 /* Post End-Points */
 app.post("/login", (req, res) => { //recieve username POST from _header.ejs || Login
+    var commit = false
     for (var ids in users) {
         if (req.body.username === users[ids]['email']) { //if username matches db
             if (req.body.password === users[ids]['password']) {
+                commit = true;
                 res.cookie("user_id", ids)
                 res.redirect("http://localhost:8080/")
             } else {
+                commit = true;
                 res.status(400).send("Username and Password do not match. Please go-back and try again.")
             }
-        } else {
-            res.status(400).send("Username does not exist. If you haven't already, please register an account at http://localhost:8080/register")
-        }
+        } 
     }
-    res.redirect("http://localhost:8080/register")
+    if (commit === false) {
+        res.status(400).send("Username does not exist. If you haven't already, please register an account at http://localhost:8080/register")
+    }
 });
 app.post("/logout", (req, res) => { //Logout
     console.log(`Logging out ${users[req.cookies['user_id']]['email']}.\nSee you again soon.`); //log the logout
     res.clearCookie("user_id");
-    res.redirect(`http://localhost:${PORT}/urls`);
+    res.redirect('/urls');
 });
 app.post("/register", (req, res) => { //Logout
     if (!req.body.username || !req.body.password) { //if user or password is not filled out
