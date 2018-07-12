@@ -109,7 +109,7 @@ app.post("/logout", (req, res) => { //Logout
     res.clearCookie("user_id");
     res.redirect('/urls');
 });
-app.post("/register", (req, res) => { //Logout
+app.post("/register", (req, res) => { //register
     if (!req.body.username || !req.body.password) { //if user or password is not filled out
         res.status(400)
             .send("Username or Password were not filled out!")
@@ -127,6 +127,7 @@ app.post("/register", (req, res) => { //Logout
         "email": req.body.username,
         "password": req.body.password,
     }
+    res.status(200)
     res.cookie("user_id", users[newID].id);
     console.log(`registered ${users[newID]['email']}`);
     console.log(users)
