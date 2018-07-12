@@ -96,7 +96,7 @@ app.post("/login", (req, res) => { //recieve username POST from _header.ejs || L
                 res.redirect("http://localhost:8080/")
             } else {
                 commit = true;
-                res.status(400).send("Username and Password do not match. Please go-back and try again.")
+                res.status(400).send("Username and Password do not match. Please go back and try again.")
             }
         } 
     }
