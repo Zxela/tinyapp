@@ -1,13 +1,13 @@
 <h1>Shorten URLS</h1>
-  <% if (!cookies) { %>
-      <form action="/login" method="POST">
+  <% if (!user) { %>
+      <!-- <form action="/login" method="POST">
       <label for="username">Enter a Username:</label>
       <input id="username" type="text" name="username" placeholder="username" style="width: 259px">
       <input type="submit" value="Submit">
     </form>
     <br>
-    <br>
+    <br> -->
   <% } else {%>
-      Current User is: <%= cookies %><form action="/logout" method="POST"><input type="submit" value="Logout" id="Logout"></form>
+      Current User is: <%= user['email'] %><form action="/logout" method="POST"><input type="submit" value="Logout" id="Logout"></form>
       <br>
   <% } %>
