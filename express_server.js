@@ -1,5 +1,5 @@
 const express = require("express");
-const cookieParser = require('cookie-parser')
+const cookieSession = require('cookie-session')
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 
@@ -50,14 +50,16 @@ const urlsForUser = function (id) { //function to only post users urls
 
 //body and cookiepraser - view engine ejs
 app.use(bodyParser.urlencoded({ extended: true })); //use body parser
-app.use(cookieParser()); //use cookie parser
+app.use(cookieSession({//use cookie session app.set
+    name: 'session',
+    keys: ['cats and dogs'],
+})); 
 app.set("view engine", "ejs"); //set view engine
-
 app.get("/", (req, res) => { //redirect to mainpage
     res.redirect("/urls/new");
 });
 app.get("/register", (req, res) => { //Registration Page
-    let userID = req.cookies['user_id']
+    let userID = req.session.user_id
     let user = users[userID]
     let templateVars = {
         user: user
@@ -65,7 +67,7 @@ app.get("/register", (req, res) => { //Registration Page
     res.render("register", templateVars);
 });
 app.get("/login", (req, res) => { //Login
-    let userID = req.cookies['user_id']
+    let userID = req.session.user_id
     let user = users[userID]
     let templateVars = {
         user: user
@@ -73,10 +75,10 @@ app.get("/login", (req, res) => { //Login
     res.render("login", templateVars);
 });
 app.get("/urls", (req, res) => { //page with index of urls
-    if (!req.cookies['user_id']) {
+    if (!req.session.user_id) {
         res.redirect('/register');
     } else {
-        let userID = req.cookies['user_id']
+        let userID = req.session.user_id
         let user = users[userID]
         let templateVars = {
             user: user,
@@ -87,10 +89,10 @@ app.get("/urls", (req, res) => { //page with index of urls
     }
 });
 app.get("/urls/new", (req, res) => { //page to make new tinyURL
-    if (!req.cookies['user_id']) {
+    if (!req.session.user_id) {
         res.redirect('/register');
     } else {
-        let userID = req.cookies['user_id']
+        let userID = req.session.user_id
         let user = users[userID]
         let templateVars = {
             user: user
@@ -99,7 +101,7 @@ app.get("/urls/new", (req, res) => { //page to make new tinyURL
     }
 });
 app.get("/urls/:id", (req, res) => { //render page showing shrunk url
-    let userID = req.cookies['user_id']
+    let userID = req.session.user_id
     let user = users[userID]
     let templateVars = {
         shortURL: req.params.id,
@@ -125,7 +127,7 @@ app.post("/login", (req, res) => { //recieve username POST from _header.ejs || L
         if (req.body.username === users[ids]['email']) { //if username matches db
             if (bcrypt.compareSync(req.body.password, users[ids]['password'])) {
                 commit = true;
-                res.cookie("user_id", ids)
+                req.session.user_id = ids
                 res.redirect("http://localhost:8080/")
             } else {
                 commit = true;
@@ -138,8 +140,8 @@ app.post("/login", (req, res) => { //recieve username POST from _header.ejs || L
     }
 });
 app.post("/logout", (req, res) => { //Logout
-    console.log(`Logging out ${users[req.cookies['user_id']]['email']}.\nSee you again soon.`); //log the logout
-    res.clearCookie("user_id");
+    console.log(`Logging out ${users[req.session.user_id]['email']}.\nSee you again soon.`); //log the logout
+    req.session = null;
     res.redirect('/urls');
 });
 app.post("/register", (req, res) => { //register
@@ -161,7 +163,7 @@ app.post("/register", (req, res) => { //register
         "password": bcrypt.hashSync(req.body.password, 10),
     }
     res.status(200)
-    res.cookie("user_id", users[newID].id);
+    req.session.user_id = users[newID].id;
     console.log(`registered ${users[newID]['email']}`);
     console.log(users)
     res.redirect(`http://localhost:${PORT}/urls`);
@@ -170,17 +172,17 @@ app.post("/urls/new", (req, res) => {  //receive post from urls/new
     let shortenedURL = generateRandomString();
     urlDatabase[shortenedURL] = {
         'adr': req.body.longURL,
-        'userID': req.cookies['user_id'],
+        'userID': req.session.user_id,
     }
     console.log(`Added ${urlDatabase[shortenedURL]} to list of sites as ${shortenedURL}`) //log the addition of a new site
     res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 });
 app.post("/urls/:id/edit", (req, res) => { //recieve edited address from :id/edit
-    if (urlDatabase[req.params.id]['userID'] === req.cookies['user_id']) {
+    if (urlDatabase[req.params.id]['userID'] === req.session.user_id) {
         delete urlDatabase[req.params.id];
         urlDatabase[req.params.id] = {
             'adr': req.body.longURL,
-            'userID': req.cookies['user_id'],
+            'userID': req.session.user_id,
         }
         res.redirect(`http://localhost:${PORT}/urls/${req.params.id}`);
     } else {
@@ -189,7 +191,7 @@ app.post("/urls/:id/edit", (req, res) => { //recieve edited address from :id/edi
     }
 })
 app.post("/urls/:id/delete", (req, res) => { //on delete button
-    if (urlDatabase[req.params.id]['userID'] === req.cookies['user_id']) {
+    if (urlDatabase[req.params.id]['userID'] === req.session.user_id) {
         console.log(urlDatabase[req.params.id], "has been deleted");
         delete urlDatabase[req.params.id];
         res.redirect(`http://localhost:${PORT}/urls`); //redirect to updated list
