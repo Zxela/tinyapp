@@ -56,7 +56,7 @@ app.use(cookieSession({//use cookie session app.set
 })); 
 app.set("view engine", "ejs"); //set view engine
 app.get("/", (req, res) => { //redirect to mainpage
-    res.redirect("/urls/new");
+    res.redirect("/urls");
 });
 app.get("/register", (req, res) => { //Registration Page
     let userID = req.session.user_id
@@ -76,7 +76,7 @@ app.get("/login", (req, res) => { //Login
 });
 app.get("/urls", (req, res) => { //page with index of urls
     if (!req.session.user_id) {
-        res.redirect('/register');
+        res.redirect('/login');
     } else {
         let userID = req.session.user_id
         let user = users[userID]
@@ -108,7 +108,13 @@ app.get("/urls/:id", (req, res) => { //render page showing shrunk url
         urls: urlDatabase,
         user: user
     };
-    res.render("urls_show", templateVars);
+    for (var sites in urlDatabase) {
+        if (sites === req.params.id) {
+            res.render("urls_show", templateVars);
+            return; 
+        }
+    }
+    res.redirect("/urls");
 });
 app.get("/u/:shortURL", (req, res) => { // redirect short URL to Long URL
     let longURL = urlDatabase[req.params.shortURL]['adr'];
