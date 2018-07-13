@@ -152,9 +152,17 @@ app.post("/urls/new", (req, res) => {  //receive post from urls/new
     res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 });
 app.post("/urls/:id/edit", (req, res) => { //recieve edited address from :id/edit
-    delete urlDatabase[req.params.id];
-    urlDatabase[req.params.id] = req.body.longURL;
-    res.redirect(`http://localhost:${PORT}/urls/${req.params.id}`);
+    if (urlDatabase[req.params.id]['userID'] === req.cookies['user_id']) {
+        delete urlDatabase[req.params.id];
+        urlDatabase[req.params.id] = {
+            'adr': req.body.longURL,
+            'userID': req.cookies['user_id'],
+        }
+        res.redirect(`http://localhost:${PORT}/urls/${req.params.id}`);
+    } else {
+        res.status(400)
+        .send("you do not have permission to edit this link.")
+    }
 })
 app.post("/urls/:id/delete", (req, res) => { //on delete button
     console.log(urlDatabase[req.params.id], "has been deleted");
