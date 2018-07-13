@@ -84,7 +84,6 @@ app.get("/urls", (req, res) => { //page with index of urls
             user: user,
             urls: urlsForUser(userID),
         };
-        console.log(templateVars.user)
         res.render("urls_index", templateVars);
     }
 });
@@ -175,8 +174,7 @@ app.post("/register", (req, res) => { //register
     }
     res.status(200)
     req.session.user_id = users[newID].id;
-    console.log(`registered ${users[newID]['email']}`);
-    console.log(users)
+    console.log(`Registered ${users[newID]['email']}`);
     res.redirect(`http://localhost:${PORT}/urls`);
 });
 app.post("/urls/new", (req, res) => {  //receive post from urls/new
@@ -185,7 +183,7 @@ app.post("/urls/new", (req, res) => {  //receive post from urls/new
         'adr': req.body.longURL,
         'userID': req.session.user_id,
     }
-    console.log(`Added ${urlDatabase[shortenedURL]} to list of sites as ${shortenedURL}`) //log the addition of a new site
+    console.log(`Added ${urlDatabase[shortenedURL]['adr']} to list of sites as ${shortenedURL}`) //log the addition of a new site
     res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 });
 app.post("/urls/:id/edit", (req, res) => { //recieve edited address from :id/edit
