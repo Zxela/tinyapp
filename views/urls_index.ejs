@@ -10,13 +10,11 @@
             <% include partials/_header %>
         </header>
         <% for(let key in urls) { %>
-            <% if (user['id'] === urls[key]['userID']) { %>
                 <li>                
                     <a href="http://localhost:8080/u/<%= key %>"><%= key %></a> --> <%= urls[key]['adr'] %>
                     <a href="http://localhost:8080/urls/<%= key %>"><button>Edit</button></a>
                     <form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form>
                 </li>
-                    <% } %>
         <% } %>
         <hr />
         <h4>

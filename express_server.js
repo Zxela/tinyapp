@@ -27,6 +27,8 @@ const users = { //stores users
         password: "dishwasher-funk"
     }
 }
+
+
 //body and cookiepraser - view engine ejs
 app.use(bodyParser.urlencoded({ extended: true })); //use body parser
 app.use(cookieParser()); //use cookie parser
