@@ -1,9 +1,7 @@
 const express = require("express");
 const cookieParser = require('cookie-parser')
 const bodyParser = require("body-parser");
-// const bcrypt = require('bcrypt');
-// const password = "purple-monkey-dinosaur"; // you will probably this from req.params
-// const hashedPassword = bcrypt.hashSync(password, 10);
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = 8080; // Port to use
@@ -31,12 +29,12 @@ const users = { //stores users
     "userRandomID": {
         id: "userRandomID",
         email: "user@example.com",
-        password: "purple-monkey-dinosaur"
+        password: "$2b$10$fnNlhK7iFfWEaHhvHSpXWO8AWV1Teb7WUzCCgR2bJRzRtHRPYi3AW"
     },
     "user2RandomID": {
         id: "user2RandomID",
         email: "user2@example.com",
-        password: "dishwasher-funk"
+        password: "$2b$10$br.go/VnjGccMBsOiPuHheAZtsYvIuHZm1YqyMvvxTfXYwVxyIqDe"
     }
 }
 
@@ -125,7 +123,7 @@ app.post("/login", (req, res) => { //recieve username POST from _header.ejs || L
     var commit = false
     for (var ids in users) {
         if (req.body.username === users[ids]['email']) { //if username matches db
-            if (req.body.password === users[ids]['password']) {
+            if (bcrypt.compareSync(req.body.password, users[ids]['password'])) {
                 commit = true;
                 res.cookie("user_id", ids)
                 res.redirect("http://localhost:8080/")
@@ -160,7 +158,7 @@ app.post("/register", (req, res) => { //register
     users[newID] = {
         "id": newID,
         "email": req.body.username,
-        "password": req.body.password,
+        "password": bcrypt.hashSync(req.body.password, 10),
     }
     res.status(200)
     res.cookie("user_id", users[newID].id);
