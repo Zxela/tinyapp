@@ -9,6 +9,7 @@
         <header>
             <% include partials/_header %>
         </header>
+        <h3>Your URL's:</h3>
         <% for(let key in urls) { %>
                 <li>                
                     <a href="http://localhost:8080/u/<%= key %>"><%= key %></a> --> <%= urls[key]['adr'] %>
@@ -21,7 +22,7 @@
             <a target="_self" href="http://localhost:8080/urls/new"><button>Shrink your URL here</button></a>
         </h4>
         <h4>
-            <a target="_self" href="http://localhost:8080/urls/"><button>List of shrunken URL's</button></a>
+            <a target="_self" href="http://localhost:8080/urls/"><button>Refresh list of shrunken URL's</button></a>
         </h4>
     </body>
 </html>

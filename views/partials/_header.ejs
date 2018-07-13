@@ -1,20 +1,15 @@
-<h1>Shorten URLS</h1>
+<h1>TinyApp - Shorten your URL's</h1>
 <% if (!user) { %>
-    <a href="http://localhost:8080/login">
-        <button>Login</button>
-    </a>
-    <br> or
-    <br>
-    <a href="http://localhost:8080/register">
-        <button>Register New Account</button>
-    </a>
+    <a href="http://localhost:8080/login"><button>Login</button></a>
     <br>
     <br>
-    <% } else {%>
-        Current User is:
-        <%= user['email'] %>
-            <form action="/logout" method="POST">
-                <input type="submit" value="Logout" id="Logout">
-            </form>
-            <br>
-            <% } %>
+    <a href="http://localhost:8080/register"><button>Register New Account</button></a>
+    <br>
+    <br>
+<% } else {%>
+    Current User is:
+    <%= user['email'] %>
+        <form action="/logout" method="POST">
+            <input type="submit" value="Logout" id="Logout">
+        </form>
+        <% } %>
