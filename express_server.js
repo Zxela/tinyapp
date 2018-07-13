@@ -178,13 +178,18 @@ app.post("/register", (req, res) => { //register
     res.redirect(`http://localhost:${PORT}/urls`);
 });
 app.post("/urls/new", (req, res) => {  //receive post from urls/new
-    let shortenedURL = generateRandomString();
-    urlDatabase[shortenedURL] = {
-        'adr': req.body.longURL,
-        'userID': req.session.user_id,
+    if (req.body.longURL.substring(0,7) != "http://"){
+        res.status(403)
+        .send("URL must begin with 'http://'")
+    } else {
+        let shortenedURL = generateRandomString();
+        urlDatabase[shortenedURL] = {
+            'adr': req.body.longURL,
+            'userID': req.session.user_id,
+        }
+        console.log(`Added ${urlDatabase[shortenedURL]['adr']} to list of sites as ${shortenedURL}`) //log the addition of a new site
+        res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
     }
-    console.log(`Added ${urlDatabase[shortenedURL]['adr']} to list of sites as ${shortenedURL}`) //log the addition of a new site
-    res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 });
 app.post("/urls/:id/edit", (req, res) => { //recieve edited address from :id/edit
     if (urlDatabase[req.params.id]['userID'] === req.session.user_id) {
