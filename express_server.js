@@ -147,7 +147,10 @@ app.post("/register", (req, res) => { //register
 });
 app.post("/urls/new", (req, res) => {  //receive post from urls/new
     let shortenedURL = generateRandomString();
-    urlDatabase[shortenedURL] = req.body.longURL;
+    urlDatabase[shortenedURL] = {
+        'adr': req.body.longURL,
+        'userID': req.cookies['user_id'],
+    }
     console.log(`Added ${urlDatabase[shortenedURL]} to list of sites as ${shortenedURL}`) //log the addition of a new site
     res.redirect(`http://localhost:${PORT}/urls/${shortenedURL}`);         // Respond with 'Ok' (we will replace this)
 });
@@ -165,9 +168,14 @@ app.post("/urls/:id/edit", (req, res) => { //recieve edited address from :id/edi
     }
 })
 app.post("/urls/:id/delete", (req, res) => { //on delete button
-    console.log(urlDatabase[req.params.id], "has been deleted");
-    delete urlDatabase[req.params.id];
-    res.redirect(`http://localhost:${PORT}/urls`); //redirect to updated list
+    if (urlDatabase[req.params.id]['userID'] === req.cookies['user_id']) {
+        console.log(urlDatabase[req.params.id], "has been deleted");
+        delete urlDatabase[req.params.id];
+        res.redirect(`http://localhost:${PORT}/urls`); //redirect to updated list
+    } else {
+        res.status(400)
+        .send("you do not have permission to edit this link.")
+    }
 });
 
 app.listen(PORT, () => { //Port to listen on
