@@ -101,6 +101,10 @@ app.get("/urls/new", (req, res) => { //page to make new tinyURL
     }
 });
 app.get("/urls/:id", (req, res) => { //render page showing shrunk url
+    if (!req.session.user_id) {
+        res.status(403)
+        .send("please register for an account before trying to access this page")
+    }
     let userID = req.session.user_id
     let user = users[userID]
     let templateVars = {
