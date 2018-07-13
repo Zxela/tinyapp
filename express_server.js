@@ -8,11 +8,11 @@ const bodyParser = require("body-parser");
 const urlDatabase = { //stores urls
     "b2xVn2" : { 
         'adr': "http://www.lighthouselabs.ca",
-        "userID": "userRandomID",
+        'userID': "userRandomID",
     },
     "9sm5xK" : {
         'adr': "http://www.google.com",
-        "userID": "user2RandomID",
+        'userID': "user2RandomID",
     },  
 };
 const users = { //stores users
@@ -53,7 +53,7 @@ app.get("/login", (req, res) => { //Login
 });
 app.get("/urls", (req, res) => { //page with index of urls
     if (!req.cookies['user_id']) {
-        res.redirect('register');
+        res.redirect('/register');
     } else {
         let userID = req.cookies['user_id']
         let user = users[userID]
@@ -67,7 +67,7 @@ app.get("/urls", (req, res) => { //page with index of urls
 });
 app.get("/urls/new", (req, res) => { //page to make new tinyURL
     if (!req.cookies['user_id']) {
-        res.redirect('register');
+        res.redirect('/register');
     } else {
         let userID = req.cookies['user_id']
         let user = users[userID]
