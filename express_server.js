@@ -1,8 +1,12 @@
 const express = require("express");
 const cookieParser = require('cookie-parser')
-const app = express();
-const PORT = 8080; // Port to use 
 const bodyParser = require("body-parser");
+// const bcrypt = require('bcrypt');
+// const password = "purple-monkey-dinosaur"; // you will probably this from req.params
+// const hashedPassword = bcrypt.hashSync(password, 10);
+
+const app = express();
+const PORT = 8080; // Port to use
 
 /*objects for storage */
 const urlDatabase = { //stores urls
@@ -12,6 +16,14 @@ const urlDatabase = { //stores urls
     },
     "9sm5xK" : {
         'adr': "http://www.google.com",
+        'userID': "user2RandomID",
+    },  
+    "9sasdxK" : {
+        'adr': "http://www.gasdoogle.com",
+        'userID': "user2RandomID",
+    },  
+    "9smasd" : {
+        'adr': "http://www.goasdasdogle.com",
         'userID': "user2RandomID",
     },  
 };
@@ -28,6 +40,15 @@ const users = { //stores users
     }
 }
 
+const urlsForUser = function (id) { //function to only post users urls
+    results = {};
+    for (let ids in urlDatabase){
+        if (urlDatabase[ids]['userID'] === id) {
+            results[ids] = urlDatabase[ids]
+        }
+    }
+    return results
+}
 
 //body and cookiepraser - view engine ejs
 app.use(bodyParser.urlencoded({ extended: true })); //use body parser
@@ -61,7 +82,7 @@ app.get("/urls", (req, res) => { //page with index of urls
         let user = users[userID]
         let templateVars = {
             user: user,
-            urls: urlDatabase,
+            urls: urlsForUser(userID),
         };
         console.log(templateVars.user)
         res.render("urls_index", templateVars);
