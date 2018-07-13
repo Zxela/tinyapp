@@ -6,10 +6,15 @@ const bodyParser = require("body-parser");
 
 /*objects for storage */
 const urlDatabase = { //stores urls
-    "b2xVn2": "http://www.lighthouselabs.ca",
-    "9sm5xK": "http://www.google.com"
+    "b2xVn2" : { 
+        'adr': "http://www.lighthouselabs.ca",
+        'userID': "userRandomID"
+    },
+    "9sm5xK" : {
+        'adr': "http://www.google.com",
+        'userID': "user2RandomID"
+    }  
 };
-
 const users = { //stores users
     "userRandomID": {
         id: "userRandomID",
@@ -22,10 +27,9 @@ const users = { //stores users
         password: "dishwasher-funk"
     }
 }
-
+//body and cookiepraser - view engine ejs
 app.use(bodyParser.urlencoded({ extended: true })); //use body parser
 app.use(cookieParser()); //use cookie parser
-
 app.set("view engine", "ejs"); //set view engine
 
 app.get("/", (req, res) => { //redirect to mainpage
@@ -48,21 +52,29 @@ app.get("/login", (req, res) => { //Login
     res.render("login", templateVars);
 });
 app.get("/urls", (req, res) => { //page with index of urls
-    let userID = req.cookies['user_id']
-    let user = users[userID]
-    let templateVars = {
-        user: user,
-        urls: urlDatabase,
-    };
-    res.render("urls_index", templateVars);
+    if (!req.cookies['user_id']) {
+        res.redirect('register');
+    } else {
+        let userID = req.cookies['user_id']
+        let user = users[userID]
+        let templateVars = {
+            user: user,
+            urls: urlDatabase,
+        };
+        res.render("urls_index", templateVars);
+    }
 });
 app.get("/urls/new", (req, res) => { //page to make new tinyURL
-    let userID = req.cookies['user_id']
-    let user = users[userID]
-    let templateVars = {
-        user: user
-    };
-    res.render("urls_new", templateVars);
+    if (!req.cookies['user_id']) {
+        res.redirect('register');
+    } else {
+        let userID = req.cookies['user_id']
+        let user = users[userID]
+        let templateVars = {
+            user: user
+        };
+        res.render("urls_new", templateVars);
+    }
 });
 app.get("/urls/:id", (req, res) => { //render page showing shrunk url
     let userID = req.cookies['user_id']
@@ -75,7 +87,7 @@ app.get("/urls/:id", (req, res) => { //render page showing shrunk url
     res.render("urls_show", templateVars);
 });
 app.get("/u/:shortURL", (req, res) => { // redirect short URL to Long URL
-    let longURL = urlDatabase[req.params.shortURL];
+    let longURL = urlDatabase[req.params.shortURL]['adr'];
     if (longURL == undefined) {
         res.status(404)
             .send("Not found!")
@@ -84,7 +96,6 @@ app.get("/u/:shortURL", (req, res) => { // redirect short URL to Long URL
         res.redirect(longURL);
     }
 });
-
 /* Post End-Points */
 app.post("/login", (req, res) => { //recieve username POST from _header.ejs || Login
     var commit = false
@@ -98,7 +109,7 @@ app.post("/login", (req, res) => { //recieve username POST from _header.ejs || L
                 commit = true;
                 res.status(400).send("Username and Password do not match. Please go back and try again.")
             }
-        } 
+        }
     }
     if (commit === false) {
         res.status(400).send("Username does not exist. If you haven't already, please register an account at http://localhost:8080/register")
@@ -113,12 +124,12 @@ app.post("/register", (req, res) => { //register
     if (!req.body.username || !req.body.password) { //if user or password is not filled out
         res.status(400)
             .send("Username or Password were not filled out!")
-    } else {
-        for (var ids in users) {
-            if (req.body.username === users[ids]['email']) { //if username exists
-                res.status(400)
-                    .send("Username already exists")
-            }
+    }
+    for (var ids in users) {
+        if (req.body.username === users[ids]['email']) { //if username exists
+            res.status(400)
+                .send("Username already exists")
+            
         }
     }
     let newID = "user" + generateRandomString();
@@ -150,8 +161,8 @@ app.post("/urls/:id/delete", (req, res) => { //on delete button
     res.redirect(`http://localhost:${PORT}/urls`); //redirect to updated list
 });
 
-app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`);//Logout
+app.listen(PORT, () => { //Port to listen on
+    console.log(`App listening on port ${PORT}`);
 });
 function generateRandomString() { // generate string function
     return Math.random().toString(36).substring(2, 8);

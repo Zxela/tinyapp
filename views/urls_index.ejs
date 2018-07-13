@@ -1,18 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
-<body>
-    <header>
-        <% include partials/_header %>
-    </header>
+
+    <head>
+        <title>TinyApp</title>
+    </head>
+
+    <body>
+        <header>
+            <% include partials/_header %>
+        </header>
         <% for(let key in urls) { %>
-       <li><a href="http://localhost:8080/u/<%= key %>"><%= key %></a>  --> <%= urls[key] %> <a href="http://localhost:8080/urls/<%= key %>">Edit</a> <form method="POST" action="/urls/<%= key %>/delete"><br><input type="submit" class="btn" value="Delete Me" /></form><br></li>
-    <% } %>
-    <div></div>
-    <hr />
-    <h4><a target="_self" href="http://localhost:8080">Shrink your URL here</a></h4>
-    <h4><a target="_self" href="http://localhost:8080/urls/">List of shrunken URL's</a></h4>
-</body>
+        <li>
+            <a href="http://localhost:8080/u/<%= key %>"><%= key %></a> --> <%= urls[key]['adr'] %>
+            <a href="http://localhost:8080/urls/<%= key %>"><button>Edit</button></a>
+            <form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form>
+            <br>
+        </li>
+        <% } %>
+        <div></div>
+        <hr />
+        <h4>
+            <a target="_self" href="http://localhost:8080">Shrink your URL here</a>
+        </h4>
+        <h4>
+            <a target="_self" href="http://localhost:8080/urls/">List of shrunken URL's</a>
+        </h4>
+    </body>
 </html>
