@@ -10,14 +10,14 @@
             <% include partials/_header %>
         </header>
         <% for(let key in urls) { %>
-        <li>
-            <a href="http://localhost:8080/u/<%= key %>"><%= key %></a> --> <%= urls[key]['adr'] %>
-            <a href="http://localhost:8080/urls/<%= key %>"><button>Edit</button></a>
-            <form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form>
-            <br>
-        </li>
+            <% if (user['id'] === urls[key]['userID']) { %>
+                <li>                
+                    <a href="http://localhost:8080/u/<%= key %>"><%= key %></a> --> <%= urls[key]['adr'] %>
+                    <a href="http://localhost:8080/urls/<%= key %>"><button>Edit</button></a>
+                    <form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form>
+                </li>
+                <% } %>
         <% } %>
-        <div></div>
         <hr />
         <h4>
             <a target="_self" href="http://localhost:8080">Shrink your URL here</a>

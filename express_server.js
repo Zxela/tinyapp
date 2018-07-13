@@ -8,12 +8,12 @@ const bodyParser = require("body-parser");
 const urlDatabase = { //stores urls
     "b2xVn2" : { 
         'adr': "http://www.lighthouselabs.ca",
-        'userID': "userRandomID"
+        "userID": "userRandomID",
     },
     "9sm5xK" : {
         'adr': "http://www.google.com",
-        'userID': "user2RandomID"
-    }  
+        "userID": "user2RandomID",
+    },  
 };
 const users = { //stores users
     "userRandomID": {
@@ -61,6 +61,7 @@ app.get("/urls", (req, res) => { //page with index of urls
             user: user,
             urls: urlDatabase,
         };
+        console.log(templateVars.user)
         res.render("urls_index", templateVars);
     }
 });
