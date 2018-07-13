@@ -114,7 +114,8 @@ app.get("/urls/:id", (req, res) => { //render page showing shrunk url
             return; 
         }
     }
-    res.redirect("/urls");
+    res.status(404)
+    .send("URL doesn't exist~!")
 });
 app.get("/u/:shortURL", (req, res) => { // redirect short URL to Long URL
     let longURL = urlDatabase[req.params.shortURL]['adr'];
