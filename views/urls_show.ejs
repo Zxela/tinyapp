@@ -8,7 +8,7 @@
     <header><% include partials/_header %></header>
     <br>
     <h1>Your shortened URL</h1>
-    <h3><%= urls[shortURL]['adr'] %> has been shortened to <a href=http://localhost:8080/u/<%= shortURL %>><%= shortURL %></a></h3>
+    <h3><%= urls[shortURL]['adr'] %> has been shortened to <a href=http://localhost:8080/u/<%= shortURL %>>http://localhost:8080/u/<%= shortURL %></a></h3>
     <form action="/urls/<%= shortURL %>/edit" method="POST">
         <input id="longURL" type="text" name="longURL" placeholder="<%= urls[shortURL]['adr'] %>" style="width: 300px">
         <input type="submit" value="Update">

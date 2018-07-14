@@ -12,7 +12,7 @@
         <h3>Your URL's:</h3>
         <% for(let key in urls) { %>
                 <li>                
-                    <a href="http://localhost:8080/u/<%= key %>"><%= key %></a> --> <%= urls[key]['adr'] %>
+                    <%= urls[key]['adr'] %> --> <a href="http://localhost:8080/u/<%= key %>">http://localhost:8080/u/<%= key %></a>
                     <a href="http://localhost:8080/urls/<%= key %>"><button>Edit</button></a>
                     <form method="POST" action="/urls/<%= key %>/delete"><input type="submit" class="btn" value="Delete Me" /></form>
                 </li>
