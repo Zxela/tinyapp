@@ -158,11 +158,13 @@ app.post("/register", (req, res) => { //register
     if (!req.body.username || !req.body.password) { //if user or password is not filled out
         res.status(400)
             .send("Username or Password were not filled out!")
+            return;
     }
     for (var ids in users) {
         if (req.body.username === users[ids]['email']) { //if username exists
             res.status(400)
                 .send("Username already exists")
+                return;
             
         }
     }
